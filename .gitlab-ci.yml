@@ -1,0 +1,10 @@
+image: node:8.9-alpine
+
+stages:
+    - buildMyApp
+    
+buildApp:
+    stage: buildMyApp
+    script:
+        - echo "start my job"
+        - node index.js
