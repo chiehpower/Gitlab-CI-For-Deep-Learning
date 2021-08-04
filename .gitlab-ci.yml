@@ -5,6 +5,8 @@ stages:
     
 buildApp:
     stage: buildMyApp
+    tag: 
+        - test1
     script:
         - echo "start my job"
         - node index.js
