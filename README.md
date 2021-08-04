@@ -13,6 +13,8 @@
 
 ## Steps
 
+(The steps and commands were followed from [1] and [2] of Reference area.)
+
 1. Create a runner.
 
 Please define the location of your config. 
@@ -26,7 +28,7 @@ Here is my example.
 Check the "Set up a specific runner manually" area.
 
 ```
-$ docker run --rm -t -i -v /test-pipeline/config:/etc/gitlab-runner --name gitlab-runner gitlab/gitlab-runner register
+$ docker run --rm -t -i -v $PWD/config:/etc/gitlab-runner --name gitlab-runner gitlab/gitlab-runner register
 
 Runtime platform                                    arch=amd64 os=linux pid=6 revision=8925d9a0 version=14.1.0
 Running in system-mode.                            
@@ -51,8 +53,8 @@ Done of registered runner only, and then let's start the runner.
 
 Please change your path of config folder.
 ```
-test-pipeline ›› docker run -d --name gitlab-runner --restart always \   
--v /test-pipeline/config:/etc/gitlab-runner \ 
+$ docker run -d --name gitlab-runner --restart always \   
+-v $PWD/config:/etc/gitlab-runner \ 
 -v /var/run/docker.sock:/var/run/docker.sock \
 gitlab/gitlab-runner:latest
 d217fc88273f841a9743f97056468c3cc6f91d0d7f5f91d1dee2fd0ceec0bb3d
