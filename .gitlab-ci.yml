@@ -5,7 +5,7 @@ stages:
     
 buildApp:
     stage: buildMyApp
-    tag: 
+    tags: 
         - test1
     script:
         - echo "start my job"
