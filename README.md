@@ -1,6 +1,3 @@
----
-tags: Specialised Notes
----
 # Gitlab Pipeline
 
 ## Introduction
