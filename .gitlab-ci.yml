@@ -6,7 +6,7 @@ stages:
 buildApp:
     stage: buildMyApp
     tags: 
-        - test1
+        - linux_x64
     script:
         - echo "start my job"
         - node index.js
