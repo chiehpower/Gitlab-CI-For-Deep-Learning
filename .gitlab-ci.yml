@@ -8,5 +8,5 @@ buildApp:
     tags: 
         - linux_x64
     script:
-        - echo "start my job"
+        - echo "start my job - here is the branch-test Not master."
         - node index.js
