@@ -10,7 +10,7 @@
 1. Gitlab server and Gitlab runner can be set in different devices.
 2. Gitlab runner can support various OS versions including Linux, MacOS, WIN, etc. [Documents](https://docs.gitlab.com/runner/install/)
 3. If my device is using linux, you can only use linux runner and you cannot use WIN runner.
-4. Use `tag` to control the runner.
+4. Use `tags` to control the runner.
 5. Shared runner can use on different repositories but Specific runner can only use the one repository.
 
 **TODO:**
