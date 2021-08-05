@@ -10,3 +10,6 @@ buildApp:
     script:
         - echo "start my job - here is the branch-test Not master."
         - node index.js
+        - cat README.md
+    rules:
+        - if: $CI_COMMIT_BRANCH == "branch-test"
