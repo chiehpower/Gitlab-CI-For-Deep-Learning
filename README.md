@@ -13,10 +13,7 @@
 4. Use `tags` to control the runner.
 5. Shared runner can use on different repositories but Specific runner can only use the one repository.
 
-**TODO:**
-1. How can I only use CI in specific branch?
-
-## Steps
+## Simple Steps
 
 (The steps and commands were followed from [1] and [2] of Reference area.)
 
@@ -97,6 +94,46 @@ After it finishes successfully, it will show the *passed* on the status of pipel
 
 If your gitlab-ci.yaml format wrong, you can go to **CI lint** of the pipelines page to validate the format.
 ![](./assets/ci-lint.png)
+
+# Advanced CI Rule Mechanism
+
+Only allow the specific branch to trigger CI mechanism.
+
+Define in the `.gitlab-ci.yml` file.
+
+```
+image: node:8.9-alpine
+
+stages:
+    - buildMyApp
+    
+buildApp:
+    stage: buildMyApp
+    tags: 
+        - linux_x64
+    script:
+        - echo "start my job - here is the branch-test Not master."
+        - node index.js
+        - cat README.md
+    rules:
+        - if: $CI_COMMIT_BRANCH == "branch-test"
+```
+
+Add the **rules** in that job.
+
+```yml
+rules:
+        - if: $CI_COMMIT_BRANCH == "branch-test"
+```
+
+Of course, if you wanna only trigger CI in master, or default-branch, you can set like this.
+
+```yml
+rules:
+        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+```
+
+
 
 ## Reference
 
