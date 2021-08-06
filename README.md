@@ -160,13 +160,15 @@ only:
 
 # Connect build and test stages
 
+*In this section, I did not prepare any example, but you can try it with your case.*
+
 In this scenario, I have an analysis tool that I request to use `.so` files which are generated from `py` files to compute my analysis.
 
 Hence, I define two stages that first stage is to build the `.so` files and also save these `.so` files on Gitlab server. (we can download it from Gitlab CI/CD area.) Second stage is to take those (.so) files from first stage to compute the analysis. In addition, it can help me to identify which `.so` files can work well or not.    
 
 In this `.gitlab-ci.yml`, it can achieve these things below:
 
-1. Build files. 
+1. Build codes. 
 2. Keep the files from CI mechanism on GitLab if the CI stage is success.
 3. Take the files of previous stage generated to use in the next stage.
 4. Trigger CI on the specific branch.
@@ -208,7 +210,9 @@ test-analysis-job1:
         - build-pyd
 ```
 
-*For this part, I did not provide any example.*
+You can download the artifact from here if it is able to pass the CI stage.
+
+![](./assets/artifacts.png)
 
 # Use GPU in the CI stage
 
