@@ -28,3 +28,18 @@ useGPU:
 
     rules:
         - if: $CI_COMMIT_BRANCH == "use-gpu"
+
+useGPUWithTwoTages:
+    image: pytorch/pytorch:1.9.0-cuda10.2-cudnn7-runtime
+    stage: test_gpu
+    tags: 
+        - gpu, linux_x64
+    script:
+        - echo "Check whether we have enabled our GPU or not."
+        - nvidia-smi
+        - echo "Run the test-gpu.py script."
+        - python3 -V
+        - python3 test-gpu.py
+
+    rules:
+        - if: $CI_COMMIT_BRANCH == "use-gpu"
