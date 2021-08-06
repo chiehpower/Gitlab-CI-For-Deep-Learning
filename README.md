@@ -208,7 +208,7 @@ Mainly we need to add one line in `config.toml` file.
 
 Let's create an newer runner for testing gpu use.
 
-In my `config.toml`, it will look like below:
+In my `config.toml`, it looks like below:
 
 ```yml
 concurrent = 1
@@ -238,6 +238,12 @@ check_interval = 0
     volumes = ["/cache"]
     shm_size = 0
 ```
+
+After we amend the `config` file of this runner, let's start it.
+
+I prepared one script for testing GPU by Pytorch, and we can see the result which used the GPU successfully.
+
+![](./assets/use-gpu.png)  
 
 ## Reference
 
