@@ -30,7 +30,7 @@ Mainly we can separate two parts:
 - Simple steps : The purpose is to let you complete once CI process including creating a runner and test it by this runner. It is very simple. 
 - Advanced CI Rule Mechanism: To set only using CI in the specific branch. We won't own only one branch in a majority of situations for AI developments.
 - Connect build and test stages: How to connect multi-stages during CI mechanism and export the files from CI stages.
-- Enable GPU in docker containers during CI testing for deep learning 
+- Use GPU in the CI stage: Enable GPU in docker containers during CI testing for deep learning 
 
 ## Simple Steps
 
@@ -195,6 +195,48 @@ test-analysis-job1:
         - analysis-tool
     dependencies:
         - build-pyd
+```
+
+# Use GPU in the CI stage
+
+Mainly we need to add one line in `config.toml` file.
+
+```yml
+  [runners.docker]
+    gpus = "all"
+```
+
+Let's create an newer runner for testing gpu use.
+
+In my `config.toml`, it will look like below:
+
+```yml
+concurrent = 1
+check_interval = 0
+
+[session_server]
+  session_timeout = 1800
+
+[[runners]]
+  name = "test-gpu"
+  url = "http://10.1.2.110:5567/"
+  token = "mazPUEET8A8CZK"
+  executor = "docker"
+  [runners.custom_build_dir]
+  [runners.cache]
+    [runners.cache.s3]
+    [runners.cache.gcs]
+    [runners.cache.azure]
+  [runners.docker]
+    gpus = "all"
+    tls_verify = false
+    image = "pytorch/pytorch:1.9.0-cuda10.2-cudnn7-runtime"
+    privileged = false
+    disable_entrypoint_overwrite = false
+    oom_kill_disable = false
+    disable_cache = false
+    volumes = ["/cache"]
+    shm_size = 0
 ```
 
 ## Reference
