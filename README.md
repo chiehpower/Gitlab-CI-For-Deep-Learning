@@ -1,17 +1,36 @@
-# Gitlab Pipeline
+# GitLab CI Pipeline For Deep Learning
 
 ## Introduction
 
-**Workflow:**
-1. Mainly we can separate two parts that first part is creating runner and set up runner. 
-2. Second part is to write the CI script like defining your testing workflow.
+Using CI mechanism can highly reduce developers' time that it can achieve building code, generating files, and testing your codes.   
 
-**Note:**
+In this repository, I will demonstrate how to do it from scratch and take it on deep learning domain.
+
+To avoid a beginner feeling that is a high learning threshold, I will introduce its workflow and some concepts that will make you more familiar with it. 
+
+**The workflow of manipulating CI:**
+
+Mainly we can separate two parts:
+
+1. first part is creating runner and set up runner. 
+2. Second part is to write the CI script like defining your testing / building workflow.
+
+**\* runner**: like a machine, like a people, like an executor, like a worker.
+
+**Notes:**
+
 1. Gitlab server and Gitlab runner can be set in different devices.
-2. Gitlab runner can support various OS versions including Linux, MacOS, WIN, etc. [Documents](https://docs.gitlab.com/runner/install/)
-3. If my device is using linux, you can only use linux runner and you cannot use WIN runner.
-4. Use `tags` to control the runner.
-5. Shared runner can use on different repositories but Specific runner can only use the one repository.
+2. Gitlab runner can support various OS versions including Linux, MacOS, WIN, etc. It depends on your purpose. [Documents](https://docs.gitlab.com/runner/install/)
+3. Suppose the OS of your device is Linux, you can only deploy linux runner on your device and you cannot deploy the Windows runner.
+4. We can create a lot of runners, and we use `tags` to control the runner. Each runner can only do one thing at the same time; hence, if you have many tasks or repositories, it is better if you can make more runners.
+5. Shared runner can use on different repositories, but Specific runner can only use on one repository.
+
+# Getting Started
+
+- Simple steps : The purpose is to let you complete once CI process including creating a runner and test it by this runner. It is very simple. 
+- Advanced CI Rule Mechanism: To set only using CI in the specific branch. We won't own only one branch in a majority of situations for AI developments.
+- Connect build and test stages: How to connect multi-stages during CI mechanism and export the files from CI stages.
+- Enable GPU in docker containers during CI testing for deep learning 
 
 ## Simple Steps
 
@@ -133,7 +152,50 @@ rules:
         - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 ```
 
+Or you can use alternative way like below:
+```yml
+only:
+        - (your branch name)
+```
 
+# Connect build and test stages
+
+```yml
+image: python:3.6
+
+stages:
+    - build
+    - test
+
+build-pyd:
+    stage: build
+    tags: 
+        - linux_x64
+    script:
+        - echo "Start to build (.so) pyd file in linux."
+        - chmod +x Lib/test-code/build.sh
+        - ./Lib/test-code/build.sh
+    only:
+        - analysis-tool
+    artifacts:
+        when: on_success
+        # expose_as: 'artifact 1'
+        paths: ['Lib/pyd-files/linux/*.so']
+
+test-analysis-job1:
+    stage: test
+    tags: 
+        - linux_x64
+    script:
+        - echo "Start to test the analysis of normal case with .so file in linux."
+        - python3 -V 
+        - python3 Lib/test-code/test-analysis.py
+        - echo "Done."
+    only:
+        - analysis-tool
+    dependencies:
+        - build-pyd
+```
 
 ## Reference
 
