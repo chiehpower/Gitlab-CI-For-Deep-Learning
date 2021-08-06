@@ -160,6 +160,17 @@ only:
 
 # Connect build and test stages
 
+In this scenario, I have an analysis tool that I request to use `.so` files which are generated from `py` files to compute my analysis.
+
+Hence, I define two stages that first stage is to build the `.so` files and also save these `.so` files on Gitlab server. (we can download it from Gitlab CI/CD area.) Second stage is to take those (.so) files from first stage to compute the analysis. In addition, it can help me to identify which `.so` files can work well or not.    
+
+In this `.gitlab-ci.yml`, it can achieve these things below:
+
+1. Build files. 
+2. Keep the files from CI mechanism on GitLab if the CI stage is success.
+3. Take the files of previous stage generated to use in the next stage.
+4. Trigger CI on the specific branch.
+
 ```yml
 image: python:3.6
 
@@ -172,15 +183,15 @@ build-pyd:
     tags: 
         - linux_x64
     script:
-        - echo "Start to build (.so) pyd file in linux."
-        - chmod +x Lib/test-code/build.sh
-        - ./Lib/test-code/build.sh
+        - echo "Start to build (.so) file in linux."
+        - chmod +x build.sh
+        - ./build.sh
     only:
         - analysis-tool
     artifacts:
         when: on_success
         # expose_as: 'artifact 1'
-        paths: ['Lib/pyd-files/linux/*.so']
+        paths: ['pyd-files/linux/*.so']
 
 test-analysis-job1:
     stage: test
@@ -189,7 +200,7 @@ test-analysis-job1:
     script:
         - echo "Start to test the analysis of normal case with .so file in linux."
         - python3 -V 
-        - python3 Lib/test-code/test-analysis.py
+        - python3 test-code/test-analysis.py
         - echo "Done."
     only:
         - analysis-tool
@@ -197,7 +208,11 @@ test-analysis-job1:
         - build-pyd
 ```
 
+*For this part, I did not provide any example.*
+
 # Use GPU in the CI stage
+
+> As we know, a majority of jobs ask for GPU on deep learning / AI domain. Hence, let's take a look how to enable the GPU during CI stage.
 
 Mainly we need to add one line in `config.toml` file.
 
@@ -239,11 +254,33 @@ check_interval = 0
     shm_size = 0
 ```
 
-After we amend the `config` file of this runner, let's start it.
+After we amend the `config` file of this runner, add one job for dealing with gpu testing. Then let's start it.
+
+```yml
+stages:
+    - test_gpu
+
+useGPU:
+    image: pytorch/pytorch:latest
+    stage: test_gpu
+    tags: 
+        - test-gpu
+    script:
+        - echo "Check whether we have enabled our GPU or not."
+        - nvidia-smi
+        - echo "Run the test-gpu.py script."
+        - python3 -V
+        - python3 test-gpu.py
+
+    rules:
+        - if: $CI_COMMIT_BRANCH == "use-gpu"
+```
 
 I prepared one script for testing GPU by Pytorch, and we can see the result which used the GPU successfully.
 
-![](./assets/use-gpu.png)  
+![](./assets/use-gpu.png)
+
+*For this testing, you have to checkout to `use-gpu` branch to test it. Otherwise, you can amend the branch from use-gpu to master in the gitlab-ci.yml file.*
 
 ## Reference
 
