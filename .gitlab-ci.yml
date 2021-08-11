@@ -28,3 +28,13 @@ useGPU:
 
     rules:
         - if: $CI_COMMIT_BRANCH == "use-gpu"
+
+testWIN:
+    stage: buildMyApp
+    tags: 
+        - win
+    script:
+        - echo "Now we are using WIN Runner to test."
+        - python test-gpu.py
+    rules:
+        - if: $CI_COMMIT_BRANCH == "test-win"
