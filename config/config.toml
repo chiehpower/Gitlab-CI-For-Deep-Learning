@@ -6,8 +6,8 @@ check_interval = 0
 
 [[runners]]
   name = "test-gpu"
-  url = "http://10.1.2.110:5567/"
-  token = "p54mazPUEET8A8CZKNd1"
+  url = "http://(your gitlab/"
+  token = "your runner token"
   executor = "docker"
   [runners.custom_build_dir]
   [runners.cache]

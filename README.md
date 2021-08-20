@@ -1,4 +1,4 @@
-# GitLab CI Pipeline For Deep Learning
+# GitLab CI Pipeline for Deep Learning
 
 ## Introduction
 
@@ -234,8 +234,8 @@ check_interval = 0
 
 [[runners]]
   name = "test-gpu"
-  url = "http://10.1.2.110:5567/"
-  token = "mazPUEET8A8CZK"
+  url = "http://(your gitlab/"
+  token = "your runner token"
   executor = "docker"
   [runners.custom_build_dir]
   [runners.cache]
