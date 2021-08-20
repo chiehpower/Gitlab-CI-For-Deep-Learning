@@ -1,4 +1,6 @@
-# GitLab CI Pipeline For Deep Learning
+# GitLab CI Pipeline for Deep Learning
+![](https://img.shields.io/badge/Author-Chieh-blue)
+
 
 ## Introduction
 
@@ -7,6 +9,8 @@ Using CI mechanism can highly reduce developers' time that it can achieve buildi
 In this repository, I will demonstrate how to do it from scratch and take it on deep learning domain.
 
 To avoid a beginner feeling that is a high learning threshold, I will introduce its workflow and some concepts that will make you more familiar with it. 
+
+In my instructions, I will showcase how to use it in two operating systems, linux and Win.
 
 **The workflow of manipulating CI:**
 
@@ -27,10 +31,10 @@ Mainly we can separate two parts:
 
 # Getting Started
 
-- Simple steps : The purpose is to let you complete once CI process including creating a runner and test it by this runner. It is very simple. 
+- Simple steps : The purpose is to let you complete once CI process including creating a runner and test it by this runner. It is very simple. (I also demonstrated how to install and set up a windows runner.)
 - Advanced CI Rule Mechanism: To set only using CI in the specific branch. We won't own only one branch in a majority of situations for AI developments.
-- Connect build and test stages: How to connect multi-stages during CI mechanism and export the files from CI stages.
-- Use GPU in the CI stage: Enable GPU in docker containers during CI testing for deep learning 
+- Connect `build` and `test` stages: How to connect multi-stages during CI mechanism and export the files from CI stages.
+- Use GPU in the CI stage: Enable GPU in docker containers during CI testing for deep learning (including Linux and Windows setup)
 
 ## Simple Steps
 
@@ -114,7 +118,55 @@ After it finishes successfully, it will show the *passed* on the status of pipel
 If your gitlab-ci.yaml format wrong, you can go to **CI lint** of the pipelines page to validate the format.
 ![](./assets/ci-lint.png)
 
-# Advanced CI Rule Mechanism
+## Set up a Windows runner
+
+> Please check the official document from [here](https://docs.gitlab.com/runner/install/windows.html). 
+
+The entire steps of the installation and runner setup as follows:
+
+1. First of all, I downloaded the [64-bit](https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-windows-amd64.exe) runner that the name should be `gitlab-runner-windows-amnd64`.
+
+2. Rename it to `gitlab-runner`
+
+3. Create a folder in order to let this runner work in the future.
+
+4. Open the terminal (or powershell) `
+
+   ```bash
+   ./gitlab-runner.exe install
+   ./gitlab-runner.exe start
+   ```
+
+5. Let's start to register this runner from GtiLab
+
+   ```bash
+   ./gitlab-runner.exe register
+   ```
+
+   ![](./assets/win/register-win.png)
+
+   Just change the path to yours. 
+
+   Notice: We won't use `docker` in the **executor** area here, so please fill in `shell`.
+
+6. After we register, it will also generate a `config.toml` file in the same folder.
+
+   Open it and we will modify one line.
+
+   Please amend the shell = "pwsh" to "powershell". 
+
+   ![](./assets/win/change-powershell.png)
+   
+7. Let's go back to the Runner area of settings of your repository that we can see the status of this runner. Now it is working.
+   ![](./assets/win/status-of-runner.png)
+
+8.  Let's run this runner.
+   ![](./assets/win/run-it.png)
+
+9. Then you can use it in your CI script by tag now.
+
+
+# Advanced CI mechanism manipulation
 
 Only allow the specific branch to trigger CI mechanism.
 
@@ -158,7 +210,7 @@ only:
         - (your branch name)
 ```
 
-# Connect build and test stages
+# Connect `build` and `test` stages
 
 *In this section, I did not prepare any example, but you can try it with your case.*
 
@@ -214,9 +266,11 @@ You can download the artifact from here if it is able to pass the CI stage.
 
 ![](./assets/artifacts.png)
 
-# Use GPU in the CI stage
+# Use GPU during the CI stage
 
-> As we know, a majority of jobs ask for GPU on deep learning / AI domain. Hence, let's take a look how to enable the GPU during CI stage.
+> As we know, a majority of jobs ask for GPU in the deep learning / AI domain. Hence, let's take a look how to enable the GPU during CI stage.
+
+### Linux Setup
 
 Mainly we need to add one line in `config.toml` file.
 
@@ -285,6 +339,32 @@ I prepared one script for testing GPU by Pytorch, and we can see the result whic
 ![](./assets/use-gpu.png)
 
 *For this testing, you have to checkout to `use-gpu` branch to test it. Otherwise, you can amend the branch from use-gpu to master in the gitlab-ci.yml file.*
+
+### Windows Setup
+
+In the win part, there is a little bit tricky point that it is quite complicated to use the GPU in docker images (we are talking about the default setting.). Hence, we just directly use the host GPU and run everything on host without using docker images. (i.e., it means that we will directly use the host environment.) 
+
+1. We have to create a runner on Windows system, and set up this runner in GitLab.
+If you did not have an available runner, please check [this section](#Set-up-a-Windows-runner) of my setup instruction.
+   
+2. My host environment of WIN was set GPU already. It can run the GPU with Python script normally without any error in the host side. Hence, we do not need to set GPU information in the toml scirpt or CI script.
+
+3. Set up our CI script to test GPU in WIN runner, you can checkout to my `test-win` branch.
+    Here is the partial CI yml file:
+    ```
+    testWIN:
+    stage: buildMyApp
+    tags: 
+        - win
+    script:
+        - echo "Now we are using WIN Runner to test."
+        - python test-gpu.py
+    rules:
+        - if: $CI_COMMIT_BRANCH == "test-win"
+    ```
+    
+    ![](./assets/win/gpu-win.png)
+    
 
 ## Reference
 
