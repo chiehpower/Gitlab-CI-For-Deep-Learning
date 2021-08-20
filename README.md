@@ -1,4 +1,4 @@
-# GitLab CI Pipeline For Deep Learning
+# GitLab CI Pipeline for Deep Learning
 
 ## Introduction
 
