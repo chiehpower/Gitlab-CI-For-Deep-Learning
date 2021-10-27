@@ -4,7 +4,7 @@ stages:
 buildApp:
     stage: docker
     tags: 
-        - test-docker
+        - docker-test
     before_script:
         - ssh -tt -p 9999 solomon@10.1.30.18
     script:
