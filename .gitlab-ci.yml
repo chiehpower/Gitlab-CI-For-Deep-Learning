@@ -6,7 +6,7 @@ buildApp:
     tags: 
         - test-docker
     before_script:
-        - ssh -p 9999 solomon@10.1.30.18
+        - ssh -tt -p 9999 solomon@10.1.30.18
     script:
         - ls -la
         - echo "now we are going to test whether it can show the docker information."
