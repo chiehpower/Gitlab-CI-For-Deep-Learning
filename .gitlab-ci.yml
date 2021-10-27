@@ -1,15 +1,14 @@
 image: node:8.9-alpine
 
 stages:
-    - buildMyApp
+    - docker
     
 buildApp:
-    stage: buildMyApp
+    stage: docker
     tags: 
-        - linux_x64
+        - test-docker
     script:
-        - echo "start my job - here is the branch-test Not master."
-        - node index.js
-        - cat README.md
+        - echo "now we are going to test whether it can show the docker information."
+        - docker info
     rules:
-        - if: $CI_COMMIT_BRANCH == "branch-test"
+        - if: $CI_COMMIT_BRANCH == "test-use-docker"
