@@ -5,10 +5,10 @@ buildApp:
     stage: docker
     tags: 
         - test-docker
-    # before_script:
-    #     - ssh -tt -p 9999 solomon@10.1.30.18
+    before_script:
+        - ssh -tt -p 9999 solomon@10.1.30.18
     script:
-        - cat ~/.ssh/id_rsa.pub
+        # - cat ~/.ssh/id_rsa.pub
         - ls -la
         - echo "now we are going to test whether it can show the docker information."
         - docker info
