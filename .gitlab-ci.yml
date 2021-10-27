@@ -9,9 +9,7 @@ buildApp:
         - echo "now we are going to test whether it can show the docker information."
         - docker info
         - git clone http://test:LRXVg1xXabx8i9JtyysL@10.1.2.110:5567/chieh1/test-pipeline.git
-        - pwd
-        - ls
-        - cd test-pipline/config && cat config.toml 
+        - cd config && cat config.toml 
 
     rules:
         - if: $CI_COMMIT_BRANCH == "test-use-docker"
