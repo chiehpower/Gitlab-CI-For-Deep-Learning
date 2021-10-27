@@ -6,14 +6,15 @@ buildApp:
     tags: 
         - docker-test
     before_script:
-        - ssh -tt -p 9999 solomon@10.1.30.18
+        - ssh -tt -p 22 user@10.1.30.18
     script:
         # - cat ~/.ssh/id_rsa.pub
         - ls -la
+        - pwd
         - echo "now we are going to test whether it can show the docker information."
         - docker info
-        - git clone http://test:LRXVg1xXabx8i9JtyysL@10.1.2.110:5567/chieh1/test-pipeline.git
-        - cd config && cat config.toml 
+        #- git clone http://test:LRXVg1xXabx8i9JtyysL@10.1.2.110:5567/chieh1/test-pipeline.git
+        #- cd config && cat config.toml 
 
     rules:
         - if: $CI_COMMIT_BRANCH == "test-use-docker"
