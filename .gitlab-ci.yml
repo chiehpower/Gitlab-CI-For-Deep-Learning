@@ -5,9 +5,8 @@ buildApp:
     stage: docker
     tags: 
         - docker-test
-    before_script:
-        - ssh -tt -p 22 user@10.1.30.18
     script:
+        - ssh -tt -p 22 user@10.1.30.18
         # - cat ~/.ssh/id_rsa.pub
         - ls -la
         - pwd
