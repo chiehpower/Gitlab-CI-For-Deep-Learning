@@ -11,4 +11,4 @@ buildApp:
 
     rules:
         - if: $CI_COMMIT_BRANCH == "test-use-docker"
-        when: manual
+          when: manual
